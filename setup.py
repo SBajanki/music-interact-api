@@ -7,7 +7,7 @@ setup(
     author='Sirisha Bajanki',
     author_email='bssiri@gmail.com',
     packages=['musiapi'],
-    scripts=['lyricsavgwordcount.py'],
+    scripts=['musiapi/lyricsavgwordcount.py'],
     install_requires=['requests'],
     python_requires='~=3.6',
 )
