@@ -6,7 +6,7 @@ setup(
     description='Avg words in lyrics',
     author='Sirisha Bajanki',
     author_email='bssiri@gmail.com',
-    packages=['musicapi'],
+    packages=['musiapi'],
     scripts=['lyricsavgwordcount.py'],
     install_requires=['requests'],
     python_requires='~=3.6',
