@@ -16,6 +16,10 @@ class musicLyrics():
                 :param name: artist_name:str
                 :return: artist_id:str
         '''
+		'''
+		 This function doesn't return any value when more than one artist with the same name and score=100 exists.
+		 Couldn't work on this condition due to time constraint
+		'''
         print(f'Getting the artist id ...')
 
         artist_name = urllib.parse.quote(artist_name, safe='')
@@ -77,7 +81,7 @@ class musicLyrics():
             print("Sorry, no songs exist for this artist")
             exit()
         for i in range(0, total_records, 100):  # Check the status code of the url
-            print(f'Collecting data from url with offset = {offset} and limit = {limit}')
+            print(f'Collecting recording data from musicbrainz url with offset = {offset} and limit = {limit}')
 
             url = f'https://musicbrainz.org/ws/2/recording?artist={artist_id}&offset={offset}&limit={limit}&fmt=json'
             requests.get(url)
