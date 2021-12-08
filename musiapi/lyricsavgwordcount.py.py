@@ -42,6 +42,8 @@ class musicLyrics():
                     print("Sorry, artist name doesn't exist")
                     exit()
                 else:
+					for key, val in artist_id_name_dict.items():
+                        artist_id = key
                     return (artist_id)
             except Exception as e:
 
