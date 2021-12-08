@@ -46,13 +46,11 @@ Interact with Music APIs
 4. The command line arguments for Avg word count for the lyrics of an artist
 
     ```
-    Help:
     
-    >>>musicapi  --help                show this help message and exit
 	
-	Get Statistics:
+	Get Average word count for lyrics:
 	
-	>>>musicapi <artist_name>
+	>>>lyricsavgwordcount <artist_name>
       
     
 
@@ -60,7 +58,7 @@ Interact with Music APIs
 
     Example to get avg word count for the lyrics of an artist 
 
-        >>>musicapi coldplay
+        >>>lyricsavgwordcount coldplay
       
       
     
