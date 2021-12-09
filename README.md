@@ -46,8 +46,7 @@ Interact with Music APIs
 4. The command line arguments for Avg word count for the lyrics of an artist
 
     ```
-    
-	
+   	
 	Get Average word count for lyrics:
 	
 	>>>lyricsavgwordcount "<artist_name>"
