@@ -5,26 +5,16 @@ import requests
 import time
 import urllib
 
-
-
 class musicLyrics():
-
-
     def get_artist_id(self, artist_name:str):
         '''
                 Returns artist_id ,
                 :param name: artist_name:str
                 :return: artist_id:str
         '''
-		'''
-		 This function doesn't return any value when more than one artist with the same name and score=100 exists.
-		 Couldn't work on this condition due to time constraint
-		'''
         print(f'Getting the artist id ...')
-
         artist_name = urllib.parse.quote(artist_name, safe='')
         url = f'https://musicbrainz.org/ws/2/artist/?query={artist_name}&fmt=json'
-
         requests.get(url)
         response = requests.get(url)
         artist_id_name_dict = {}
@@ -33,22 +23,41 @@ class musicLyrics():
                 artist_dict = response.json()['artists']
                 for artist in artist_dict:
                     score = artist['score']
-                    if score == 100:
+                    if score > 90 or artist['name'].lower == artist_name.lower:
                         artist_id = artist['id']
-                        artist_id_name_dict[artist_id]= artist['name']
-
+                        if artist.get('disambiguation'):
+                            disambiguation = artist['disambiguation']
+                            artist_id_name_dict[artist_id]= artist['name']+f'({disambiguation})'
+                        else:
+                            artist_id_name_dict[artist_id] = artist['name']
                 if len(artist_id_name_dict)>1:
-                    print('Sorry , There are more than one artists with this name.')
+                    option_dict = {}
+                    count = 0
+                    print('There are more than one artists with this name.')
+                    print('Please select and enter the below corresponding option number(1,2,3 ...) for the artist ...')
+                    print('--------------------------------------------------------')
                     for key, val in artist_id_name_dict.items():
-                        print(f'artist_name:{key} and artist_id:{val}')
-                    exit()
+                        count += 1
+                        print(f'{count}: {val}')
+                        option_dict[count] = key
+                    print('--------------------------------------------------------')
+                    option = input(f'Please enter the option: ')
+                    if int(option) in option_dict.keys():
+                        for key, val in option_dict.items():
+                            print(key,option)
+                            if key == int(option):
+                                artist_id= val
+                                return artist_id
+                    else:
+                        print('Sorry wrong option!')
+                        exit()
+
                 elif len(artist_id_name_dict) == 0:
                     print("Sorry, artist name doesn't exist")
                     exit()
                 else:
-                    return (artist_id)
+                     return artist_id
             except Exception as e:
-
                 print(f"Error: {e}")
                 exit()
         else:
@@ -63,9 +72,6 @@ class musicLyrics():
         '''
 
         print('Collecting all the songs list for the artist ...')
-
-
-        # set initialisation
         url = f'https://musicbrainz.org/ws/2/recording?artist={artist_id}&fmt=json'
         songs_set = set()
         response = requests.get(url)
@@ -76,13 +82,11 @@ class musicLyrics():
             print(f'Total recordings for this artist:{total_records}')
             limit = 100
             offset = 0
-
         else:
             print("Sorry, no songs exist for this artist")
             exit()
         for i in range(0, total_records, 100):  # Check the status code of the url
             print(f'Collecting recording data from musicbrainz url with offset = {offset} and limit = {limit}')
-
             url = f'https://musicbrainz.org/ws/2/recording?artist={artist_id}&offset={offset}&limit={limit}&fmt=json'
             requests.get(url)
             response = requests.get(url)
@@ -103,31 +107,21 @@ class musicLyrics():
             :return: word_count_list
         '''
         print('Calculating word count for the lyrics ...')
-
         word_count_list = []  #initialise the word_count_lsit
         for song_name in songs_set:
             try:
-                #print(song_name)
-                #logging.debug(f'{song_name}')
                 print(f'calculating lyrics word count for {song_name}')
-
-                #song_name = urllib.parse.quote(song_name, safe='')
-
                 lyrics_dict = requests.get(f'https://api.lyrics.ovh/v1/{artist_name}/{song_name}').json()
-
                 word_count = self.get_wordcount(lyrics_dict)  #call the function get_wordcount
                 if word_count != 0:
                     word_count_list.append(word_count) #prepare a list of wordcounts
-
             except Exception as e:
-
-                pass
+               pass
 
         if int(sum(word_count_list)) == 0:
            print("lyrics doesn't exist for this artist")
            exit()
         else:
-
             return word_count_list
 
 
@@ -158,7 +152,6 @@ class musicLyrics():
             lyrics = re.sub(r'[^\w\s]','', lyrics.replace('\n', " "))
             lyrics_word_list = lyrics.split(" ")    #create list of words
             word_count = len(lyrics_word_list)      # calculate the length of the list
-
         return word_count
 
     def main(self, artist_id):
@@ -168,7 +161,6 @@ class musicLyrics():
 
 
 if __name__ == "__main__":
-
 
     parser = argparse.ArgumentParser()
     parser.add_argument("artist_name",  help="Display the average words in the artist lyrics")

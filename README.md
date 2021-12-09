@@ -50,7 +50,7 @@ Interact with Music APIs
 	
 	Get Average word count for lyrics:
 	
-	>>>lyricsavgwordcount <artist_name>
+	>>>lyricsavgwordcount "<artist_name>"
       
     
 
@@ -58,7 +58,7 @@ Interact with Music APIs
 
     Example to get avg word count for the lyrics of an artist 
 
-        >>>lyricsavgwordcount coldplay
+        >>>lyricsavgwordcount "coldplay"
       
       
     
